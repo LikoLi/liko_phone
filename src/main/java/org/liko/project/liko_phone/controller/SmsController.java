@@ -63,7 +63,7 @@ public class SmsController {
         Map<Integer, String> result = new HashMap<>();
         for (int i = 0; i <= 100; i++) {
             try {
-                listener.sendAT("AT+CMGD=" + i +  ",0");
+                listener.sendAT("AT+CMGR=" + i);
                 Thread.sleep(300);
                 String msg = StringUtil.analyseStr(listener.read().split("\r\n")[2]);
                 Thread.sleep(200);
