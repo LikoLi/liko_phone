@@ -75,7 +75,7 @@ public class SmsController {
         for (int i = 0; i <= 100; i++) {
             try {
                 listener.sendAT("AT+CMGR=" + i);
-                Thread.sleep(300);
+                Thread.sleep(2000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
