@@ -1,13 +1,19 @@
 package org.liko.project.liko_phone.controller;
 
+import com.alibaba.fastjson.JSON;
 import org.liko.project.liko_phone.entity.Sms;
 import org.liko.project.liko_phone.listener.CommEventListener;
 import org.liko.project.liko_phone.repository.SmsRepository;
+import org.liko.project.liko_phone.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: Liko
@@ -50,5 +56,23 @@ public class SmsController {
         } else {
             return "密码不正确, 请重新输入!";
         }
+    }
+
+    @RequestMapping("/show")
+    public String get() {
+        Map<Integer, String> result = new HashMap<>();
+        for (int i = 0; i <= 100; i++) {
+            try {
+                listener.sendAT("AT+CMGD=" + i +  ",0");
+                Thread.sleep(300);
+                String msg = StringUtil.analyseStr(listener.read().split("\r\n")[2]);
+                Thread.sleep(200);
+                result.put(i, msg);
+            } catch (Exception e) {
+                e.printStackTrace();
+                result.put(i, e.getMessage());
+            }
+        }
+        return JSON.toJSONString(result);
     }
 }
