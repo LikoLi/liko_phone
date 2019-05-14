@@ -60,15 +60,9 @@ public class SmsController {
 
     @RequestMapping("/{id}")
     public String getById(@PathVariable("id") Integer id) {
-        String result = "";
+        String result = "success";
         try {
             listener.sendAT("AT+CMGR=" + id);
-            Thread.sleep(300);
-            String read = listener.read();
-            System.out.println(read);
-            System.out.println(StringUtil.analyseStr(read));
-            String msg = StringUtil.analyseStr(read.split("\r\n")[2]);
-            result = msg;
         } catch (Exception e) {
             e.printStackTrace();
             result = "error";
@@ -78,19 +72,14 @@ public class SmsController {
 
     @RequestMapping("/show")
     public String get() {
-        Map<Integer, String> result = new HashMap<>();
         for (int i = 0; i <= 100; i++) {
             try {
                 listener.sendAT("AT+CMGR=" + i);
                 Thread.sleep(300);
-                String msg = StringUtil.analyseStr(listener.read().split("\r\n")[2]);
-                Thread.sleep(200);
-                result.put(i, msg);
             } catch (Exception e) {
                 e.printStackTrace();
-                result.put(i, e.getMessage());
             }
         }
-        return JSON.toJSONString(result);
+        return "success";
     }
 }
