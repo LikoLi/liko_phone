@@ -58,6 +58,24 @@ public class SmsController {
         }
     }
 
+    @RequestMapping("/{id}")
+    public String getById(@PathVariable("id") Integer id) {
+        String result = "";
+        try {
+            listener.sendAT("AT+CMGR=" + id);
+            Thread.sleep(300);
+            String read = listener.read();
+            System.out.println(read);
+            System.out.println(StringUtil.analyseStr(read));
+            String msg = StringUtil.analyseStr(read.split("\r\n")[2]);
+            result = msg;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = "error";
+        }
+        return JSON.toJSONString(result);
+    }
+
     @RequestMapping("/show")
     public String get() {
         Map<Integer, String> result = new HashMap<>();
